@@ -1,46 +1,46 @@
 {
-    "expenses": [
-      {
-        "sumExpenses": "33000",
-        "year": "2019",
-        "id": 1
-      },
-      {
-        "sumExpenses": "44000",
-        "year": "2020",
-        "id": 2
-      },
-      {
-        "sumExpenses": "15500.99",
-        "year": "2021",
-        "id": 3
-      },
-      {
-        "sumExpenses": "11000",
-        "year": "2022",
-        "id": 4
-      }
-    ],
-    "income": [
-      {
-        "sumIncome": "330600",
-        "year": "2019",
-        "id": 1
-      },
-      {
-        "sumIncome": "440050",
-        "year": "2020",
-        "id": 2
-      },
-      {
-        "sumIncome": "150099",
-        "year": "2021",
-        "id": 3
-      },
-      {
-        "sumIncome": "119000",
-        "year": "2022",
-        "id": 4
-      }
-    ]
+  "expenses": [
+    {
+      "sumExpenses": "33000",
+      "year": "2019",
+      "id": 1
+    },
+    {
+      "sumExpenses": "44000",
+      "year": "2020",
+      "id": 2
+    },
+    {
+      "sumExpenses": "15500.99",
+      "year": "2021",
+      "id": 3
+    },
+    {
+      "sumExpenses": "11000",
+      "year": "2022",
+      "id": 4
+    }
+  ],
+  "income": [
+    {
+      "sumIncome": "3360",
+      "month": "January",
+      "id": 1
+    },
+    {
+      "sumIncome": "4450",
+      "month": "February",
+      "id": 2
+    },
+    {
+      "sumIncome": "1599",
+      "month": "March",
+      "id": 3
+    },
+    {
+      "sumIncome": "11900",
+      "month": "April",
+      "id": 4
+    }
+  ]
 }
