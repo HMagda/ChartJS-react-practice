@@ -41,6 +41,43 @@
       "sumIncome": "11900",
       "month": "April",
       "id": 4
+    },
+    {
+      "sumIncome": "3000",
+      "month": "September",
+      "id": 5
+    },
+    {
+      "sumIncome": "6000",
+      "month": "December",
+      "id": 6
+    },
+    {
+      "sumIncome": "4000",
+      "month": "November",
+      "id": 7
+    },
+    {
+      "sumIncome": "2500",
+      "month": "December",
+      "id": 8
+    }
+  ],
+  "categorized-expense": [
+    {
+      "cost": "100",
+      "category": "food",
+      "id": 1
+    },
+    {
+      "cost": "222",
+      "category": "media",
+      "id": 1
+    },
+    {
+      "cost": "550",
+      "category": "travel",
+      "id": 2
     }
   ]
 }

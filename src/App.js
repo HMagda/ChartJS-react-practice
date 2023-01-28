@@ -1,49 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import './App.css';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
-// import DoughnutChart from './components/DoughnutChart';
+import DoughnutChart from './components/DoughnutChart';
 
 const App = () => {
   const [formattedBarChartData, setFormattedBarChartData] = useState(null);
   const [formattedLineChartData, setFormattedLineChartData] = useState(null);
-  // const [formattedDoughnutChartData, setFormattedDoughnutChartData] = useState(null);
-
-  const [sumIncome, setSumIncome] = useState('');
-  const [month, setMonth] = useState('January');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const income = {sumIncome, month};
-
-    fetch('http://localhost:8000/income/', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(income),
-    }).then(() => {
-      console.log('new income added');
-    });
-
-    console.log('sumIncome', sumIncome);
-    console.log(
-      'formattedLineChartData labels',
-      typeof formattedLineChartData.labels[1]
-    );
-
-    console.log('formattedLineChartData', formattedLineChartData);
-
-    function addData(chart, label, data) {
-      formattedLineChartData.labels.push(label);
-      formattedLineChartData.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-      });
-    }
-
-    addData(LineChart, month, sumIncome);
-
-    setSumIncome('');
-    setMonth('January');
-  };
+  const [formattedDoughnutChartData, setFormattedDoughnutChartData] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:8000/expenses')
@@ -89,8 +52,14 @@ const App = () => {
           return index.sumIncome;
         });
 
+        let sumArr = [];
+        sumIncome.forEach((singleSum) => {
+          sumArr.push(singleSum);
+        });
+
         let formattedLineChartData = {
           labels: month,
+
           datasets: [sumIncome].map(function (singleSum) {
             return {
               label: 'Sum of income',
@@ -105,53 +74,65 @@ const App = () => {
       });
   }, []);
 
+  useEffect(() => {
+    fetch('http://localhost:8000/categorized-expense')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        const category = data.map(function (index) {
+          return index.category;
+        });
+
+        let categoriesArr = [];
+        category.forEach((singleCategory) => {
+          categoriesArr.push(singleCategory);
+        });
+
+        const cost = data.map(function (index) {
+          return index.cost;
+        });
+
+        let costArr = [];
+        cost.forEach((singleCost) => {
+          costArr.push(singleCost);
+        });
+
+        let formattedDoughnutChartData = {
+          labels: categoriesArr,
+          datasets: [
+            {
+              label: 'Cost',
+              data: costArr,
+              backgroundColor: ['black', 'red', 'green', 'pink', 'blue'],
+              borderWidth: 0,
+            },
+          ],
+        };
+
+        setFormattedDoughnutChartData(formattedDoughnutChartData);
+      });
+  }, []);
+
   return (
     <>
       <div>
-        {formattedBarChartData && (
-          <BarChart barChartData={formattedBarChartData} />
+        {formattedDoughnutChartData && (
+          <DoughnutChart
+            formattedDoughnutChartData={formattedDoughnutChartData}
+          />
         )}
       </div>
-
       <div>
         {formattedLineChartData && (
-          <LineChart lineChartData={formattedLineChartData} />
+          <LineChart formattedLineChartData={formattedLineChartData} />
         )}
       </div>
-
-      <div className='add-income'>
-        <h2>Add New Income</h2>
-        <form onSubmit={handleSubmit}>
-          <label>Income:</label>
-          <textarea
-            required
-            value={sumIncome}
-            onChange={(e) => setSumIncome(e.target.value)}
-          ></textarea>
-          <label>Month:</label>
-          <select value={month} onChange={(e) => setMonth(e.target.value)}>
-            <option value='January'>January</option>
-            <option value='February'>February</option>
-            <option value='March'>March</option>
-            <option value='April'>April</option>
-            <option value='May'>May</option>
-            <option value='June'>June</option>
-            <option value='July'>July</option>
-            <option value='August'>August</option>
-            <option value='September'>September</option>
-            <option value='October'>October</option>
-            <option value='November'>November</option>
-            <option value='December'>December</option>
-          </select>
-          <button type='submit'>Add Income</button>
-        </form>
-      </div>
-
-      {/* <div>
-        {formattedDoughnutChartData && (
-          <DoughnutChart doughnutChartData={formattedDoughnutChartData} />
+      <div>
+        {formattedBarChartData && (
+          <BarChart formattedBarChartData={formattedBarChartData} />
         )}
-      </div> */}
+      </div>
     </>
   );
 };
