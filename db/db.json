@@ -61,6 +61,11 @@
       "sumIncome": "2500",
       "month": "December",
       "id": 8
+    },
+    {
+      "sumIncome": "8000",
+      "month": "July",
+      "id": 9
     }
   ],
   "categorized-expense": [
@@ -70,14 +75,14 @@
       "id": 1
     },
     {
-      "cost": "222",
-      "category": "media",
-      "id": 1
-    },
-    {
       "cost": "550",
       "category": "travel",
       "id": 2
+    },
+    {
+      "cost": "700",
+      "category": "car",
+      "id": 3
     }
   ]
 }

@@ -3,115 +3,98 @@ import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
 import DoughnutChart from './components/DoughnutChart';
 
+const GraphStyle = class {
+  constructor(label, borderWidth, borderColor, backgroundColor) {
+    this.label = label;
+    this.borderWidth = borderWidth;
+    this.borderColor = borderColor;
+    this.backgroundColor = backgroundColor;
+  }
+};
+
 const App = () => {
   const [formattedBarChartData, setFormattedBarChartData] = useState(null);
   const [formattedLineChartData, setFormattedLineChartData] = useState(null);
-  const [formattedDoughnutChartData, setFormattedDoughnutChartData] = useState(null);
+  const [formattedDoughnutChartData, setFormattedDoughnutChartData] =
+    useState(null);
 
-  useEffect(() => {
-    fetch('http://localhost:8000/expenses')
+  const updateChart = (setter, keyword, xname, yname, style) => {
+    fetch('http://localhost:8000/' + keyword)
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        const year = data.map(function (index) {
-          return index.year;
+        const x = data.map(function (dataArr) {
+          return dataArr[xname];
         });
 
-        const sumExpenses = data.map(function (index) {
-          return index.sumExpenses;
+        const y = data.map(function (dataArr) {
+          return dataArr[yname];
         });
 
-        let formattedBarChartData = {
-          labels: year,
-          datasets: [sumExpenses].map(function (singleSum) {
+        let formattedChartData = {
+          labels: x,
+          datasets: [y].map(function (value) {
             return {
-              label: 'Sum of all expenses',
-              data: singleSum,
-              borderWidth: 2,
-              borderColor: '#8e060f',
-              backgroundColor: '#f13a37',
+              label: style.label,
+              data: value,
+              borderWidth: style.borderWidth,
+              borderColor: style.borderColor,
+              backgroundColor: style.backgroundColor,
             };
           }),
         };
-        setFormattedBarChartData(formattedBarChartData);
+        setter(formattedChartData);
       });
+  };
+
+  useEffect(() => {
+    const barChartStyle = new GraphStyle(
+      'Sum of all expenses',
+      2,
+      '#8e060f',
+      '#f13a37'
+    );
+    updateChart(
+      setFormattedBarChartData,
+      'expenses',
+      'year',
+      'sumExpenses',
+      barChartStyle
+    );
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8000/income')
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        const month = data.map(function (index) {
-          return index.month;
-        });
-
-        const sumIncome = data.map(function (index) {
-          return index.sumIncome;
-        });
-
-        let sumArr = [];
-        sumIncome.forEach((singleSum) => {
-          sumArr.push(singleSum);
-        });
-
-        let formattedLineChartData = {
-          labels: month,
-
-          datasets: [sumIncome].map(function (singleSum) {
-            return {
-              label: 'Sum of income',
-              data: singleSum,
-              borderWidth: 3,
-              borderColor: 'green',
-              backgroundColor: 'black',
-            };
-          }),
-        };
-        setFormattedLineChartData(formattedLineChartData);
-      });
+    const lineChartStyle = new GraphStyle(
+      'Sum of all income',
+      3,
+      'green',
+      'black'
+    );
+    updateChart(
+      setFormattedLineChartData,
+      'income',
+      'month',
+      'sumIncome',
+      lineChartStyle
+    );
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8000/categorized-expense')
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        const category = data.map(function (index) {
-          return index.category;
-        });
-
-        let categoriesArr = [];
-        category.forEach((singleCategory) => {
-          categoriesArr.push(singleCategory);
-        });
-
-        const cost = data.map(function (index) {
-          return index.cost;
-        });
-
-        let costArr = [];
-        cost.forEach((singleCost) => {
-          costArr.push(singleCost);
-        });
-
-        let formattedDoughnutChartData = {
-          labels: categoriesArr,
-          datasets: [
-            {
-              label: 'Cost',
-              data: costArr,
-              backgroundColor: ['black', 'red', 'green', 'pink', 'blue'],
-              borderWidth: 0,
-            },
-          ],
-        };
-
-        setFormattedDoughnutChartData(formattedDoughnutChartData);
-      });
+    const doughnutChartStyle = new GraphStyle('Cost', 0, '', [
+      'black',
+      'red',
+      'green',
+      'pink',
+      'blue',
+    ]);
+    updateChart(
+      setFormattedDoughnutChartData,
+      'categorized-expense',
+      'category',
+      'cost',
+      doughnutChartStyle
+    );
   }, []);
 
   return (
